@@ -6,6 +6,7 @@
 </template>
 
 <script setup lang="ts">
+const { $trpc } = useNuxtApp()
 definePageMeta({
 
 })
@@ -18,7 +19,9 @@ const query = gql`
     }
 `
 const variables = { }
-const { data } = await useAsyncQuery(query)
+// const { data } = await useAsyncQuery(query)
+
+const { data } = await $trpc.test.useQuery({ text: 'client '})
 
 console.log(data.value, '--data')
 </script>

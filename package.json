@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "akjs",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,9 +12,13 @@
   "dependencies": {
     "@apollo/server": "^4.11.0",
     "@as-integrations/h3": "^1.2.1",
+    "@trpc/client": "^10.45.2",
+    "@trpc/server": "^10.45.2",
     "graphql": "^16.9.0",
     "nuxt": "^3.13.0",
-    "vue": "latest"
+    "trpc-nuxt": "^0.10.22",
+    "vue": "latest",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@nuxtjs/apollo": "^5.0.0-alpha.14"
