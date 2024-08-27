@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { publicProcedure, router } from '../trpc'
+import { llmRouter } from './llm'
 
 export const appRouter = router({
     test: publicProcedure
@@ -13,7 +14,8 @@ export const appRouter = router({
                 input,
                 data: 'test trpc'
             }
-        })
+        }),
+    ...llmRouter,
 })
 
 

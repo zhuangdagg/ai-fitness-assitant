@@ -16,6 +16,7 @@
     "@trpc/server": "^10.45.2",
     "graphql": "^16.9.0",
     "nuxt": "^3.13.0",
+    "openai": "^4.56.0",
     "trpc-nuxt": "^0.10.22",
     "vue": "latest",
     "zod": "^3.23.8"

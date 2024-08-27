@@ -9,7 +9,7 @@ export default defineNuxtPlugin(() => {
                 url: '/api/trpc'
             })
         ]
-    })
+    }) as object
 
     return {
         provide: {
@@ -17,3 +17,5 @@ export default defineNuxtPlugin(() => {
         }
     }
 })
+
+export type TRPCClient = ReturnType<typeof createTRPCNuxtClient<AppRouter>>
