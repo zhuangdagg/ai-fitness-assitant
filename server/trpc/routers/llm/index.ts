@@ -2,11 +2,14 @@ import { z } from 'zod'
 import OpenAI from 'openai'
 
 import { publicProcedure } from '../../trpc'
+// import { PrismaClient } from '@prisma/client'
 
 const client = new OpenAI({
     baseURL: 'http://localhost:11434/v1',
     apiKey: 'Empty'
 })
+
+// const prisma = new PrismaClient()
 
 export const llmRouter = {
     chat: publicProcedure

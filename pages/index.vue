@@ -5,7 +5,7 @@
         <button @click="onChat">chat</button>
         <div>llm:</div>
         <div>{{ chatRes }}</div>
-        <RouterLink to="/chat"> to chat</RouterLink>
+        <ULink to="/chat"> to chat</ULink>
     </div>
 </template>
 

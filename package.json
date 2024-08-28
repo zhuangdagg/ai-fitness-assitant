@@ -12,6 +12,8 @@
   "dependencies": {
     "@apollo/server": "^4.11.0",
     "@as-integrations/h3": "^1.2.1",
+    "@nuxt/ui": "^2.18.4",
+    "@prisma/nuxt": "^0.0.35",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
     "graphql": "^16.9.0",
@@ -22,6 +24,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@nuxtjs/apollo": "^5.0.0-alpha.14"
+    "@nuxtjs/apollo": "^5.0.0-alpha.14",
+    "@prisma/client": "^5.19.0"
   }
 }

@@ -1,23 +1,37 @@
 <template>
     <div>
-        <input type="text" v-model="question" />
-        <input type="submit" @click="handleQuestion"/>
+        <UInput type="text" v-model="question" />
+        <UButton @click="handleQuestion">提交</UButton>
+        <UButton @click="handlePrisma">测试prisma</UButton>
     </div>
-    <ul>
+    <ul class="text-current">
         <li v-for="item in history">
             {{ `${item.role}: ${item.content}` }}
         </li>
     </ul>
+    <UModal v-model="modelVisible">
+        <div class="h-52 flex justify-center align-middle" />
+    </UModal>
 </template>
 
 <script setup lang="ts">
 
 
 const question = ref<string>('')
+const modelVisible = ref<boolean>(true)
 
 const history = ref<any[]>([
     { role: 'sys', content: '我是Qwen2，请向我提问吧！'}
 ])
+
+defineShortcuts({
+    ctrl_k: {
+        usingInput: true,
+        handler: () => {
+            modelVisible.value = !modelVisible.value
+        }
+    }
+})
 
 const handleQuestion = async () => {
     const userQuestion = {
@@ -29,6 +43,12 @@ const handleQuestion = async () => {
 
     console.log({ data })
     history.value.push(unref(data))
+}
+
+const handlePrisma = async () => {
+    console.log('primmmmm')
+    // const user = await useNuxtApp().$trpc.getUser.query('')
+    // console.log({user})
 }
 
 </script>
