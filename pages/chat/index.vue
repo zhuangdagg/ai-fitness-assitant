@@ -2,7 +2,7 @@
     <div>
         <UInput type="text" v-model="question" />
         <UButton @click="handleQuestion">提交</UButton>
-        <UButton @click="handlePrisma">测试prisma</UButton>
+        <UButton @click="handlePrisma">test prisma</UButton>
     </div>
     <ul class="text-current">
         <li v-for="item in history">
@@ -45,10 +45,6 @@ const handleQuestion = async () => {
     history.value.push(unref(data))
 }
 
-const handlePrisma = async () => {
-    console.log('primmmmm')
-    // const user = await useNuxtApp().$trpc.getUser.query('')
-    // console.log({user})
-}
+const handlePrisma = () => {}
 
 </script>

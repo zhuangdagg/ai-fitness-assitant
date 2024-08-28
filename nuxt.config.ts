@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         }
       }
     }
-  }], '@nuxt/ui', '@prisma/nuxt'],
+  }], '@nuxt/ui'],
   build: {
     transpile: ['trpc-nuxt'],
   },
