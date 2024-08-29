@@ -8,7 +8,9 @@ export default defineNuxtConfig({
         }
       }
     }
-  }], '@nuxt/ui'],
+  }], 
+  '@nuxt/ui'
+],
   build: {
     transpile: ['trpc-nuxt'],
   },
@@ -17,6 +19,11 @@ export default defineNuxtConfig({
   imports: {
     dirs: []
   },
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+  }
 
   // module config
 })

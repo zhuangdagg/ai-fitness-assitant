@@ -10,8 +10,10 @@
 
 import { initTRPC } from '@trpc/server'
 import { Context } from '~/server/trpc/context'
+// import { OpenApiMeta } from 'trpc-openapi'
+import { TRPCPanelMeta } from 'trpc-panel'
 
-const t = initTRPC.context<Context>().create()
+const t = initTRPC.meta<TRPCPanelMeta>().context<Context>().create()
 
 export const publicProcedure = t.procedure
 export const router = t.router
