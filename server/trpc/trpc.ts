@@ -10,7 +10,6 @@
 
 import { initTRPC } from '@trpc/server'
 import { Context } from '~/server/trpc/context'
-// import { OpenApiMeta } from 'trpc-openapi'
 import { TRPCPanelMeta } from 'trpc-panel'
 
 const t = initTRPC.meta<TRPCPanelMeta>().context<Context>().create()

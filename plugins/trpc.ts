@@ -9,7 +9,7 @@ export default defineNuxtPlugin(() => {
                 url: '/api/trpc'
             })
         ]
-    }) as object
+    })
 
     return {
         provide: {

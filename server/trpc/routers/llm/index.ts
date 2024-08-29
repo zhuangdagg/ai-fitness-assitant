@@ -22,7 +22,13 @@ export const llmRouter = {
                 model: 'qwen2:1.5b',
                 messages: [
                     input
-                ]
+                ],
+                // function_call: []
+            })
+
+            const a = await client.embeddings.create({
+                input: ['heibao'],
+                model: 'nomic-embed-text'
             })
             return chatCompletion.choices?.[0]?.message
         })
