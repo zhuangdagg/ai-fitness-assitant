@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { object } from 'zod'
 
 export const OllamaAI = {
     client: new OpenAI({
@@ -15,39 +16,65 @@ export const OllamaAI = {
         }
     }
 }
+function getFlightTimes(departure, arrival) {
+    const flights = {
+        "NYC-LAX": { departure: "08:00 AM", arrival: "11:30 AM", duration: "5h 30m" },
+        "LAX-NYC": { departure: "02:00 PM", arrival: "10:30 PM", duration: "5h 30m" },
+        "LHR-JFK": { departure: "10:00 AM", arrival: "01:00 PM", duration: "8h 00m" },
+        "JFK-LHR": { departure: "09:00 PM", arrival: "09:00 AM", duration: "7h 00m" },
+        "CDG-DXB": { departure: "11:00 AM", arrival: "08:00 PM", duration: "6h 00m" },
+        "DXB-CDG": { departure: "03:00 AM", arrival: "07:30 AM", duration: "7h 30m" }
+    };
+
+    const key = `${departure}-${arrival}`.toUpperCase();
+    return JSON.stringify(flights[key] || { error: "Flight not found" });
+}
 
 const npc_funcs = [
-    {
-        "name": "police_action",
-        "description": "执行警察的行动",
-        "parameters": {
-            "type":"object",
-            "properties": {
-                "action_name": {
-                    "type":"string",
-                    "enum": ["逮捕", "跟随", "呼叫支援", "撤退"],
-                    "description": "你采取的具体行动"
-                },
-                "talk": {
-                    "type": "string",
-                    "description": "你角色要说的话；如果需要悄悄行动，这里留空。"
-                }
+{
+    name: 'get_flight_times',
+    description: '获取航班的时间信息',
+    parameters: {
+        type: object,
+        properties: {
+            departure: {
+                type: 'string',
+                description: '出发的地点代码， 例如：广州（GZ）'
             },
-            "required": ["action_name"]
+            arrival: {
+                type: 'string',
+                description: '到达的地点代码，例如：北京（BJ）'
+            }
         }
+        
+    },
+    required: ['departure', 'arrival']
     }
 ]
 
-const messages = [
+const police_messages = [
     { role: 'system', content: '在一个游戏里，你扮演正义的警察，针对场景只需调用police_action函数，不要返回其他内容，这是游戏规则。'},
     { role: 'user', content: '场景：在街上发现一个涉嫌准备偷窃的小偷，你会怎么做'}
 ]
 
+const flight_messages = [
+    { role: 'user', content: '通过get_flight_times查询广州（GZ）飞往北京（BJ）的航班时间?' }
+]
+
+let messages = []
+
+messages = messages.concat(flight_messages)
+
 const res = await OllamaAI.client.chat.completions.create({
     model: 'qwen2:7b',
     messages,
-    functions: npc_funcs,
-    function_call: 'police_action'
+    tools: npc_funcs,
+    tool_choice: 'get_flight_times',
+    
 })
+
+// Simulates an API call to get flight times
+// In a real application, this would fetch data from a live database or API
+// const res = await runner.finalContent()
 
 console.log(res.choices?.[0].message, '--resf')
