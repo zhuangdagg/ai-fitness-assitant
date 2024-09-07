@@ -11,8 +11,33 @@ datasource db {
 }
 
 
-model User {
+model user {
   id    Int  @id @default(autoincrement())
   email String  @unique
   name  String?
+}
+
+model workspaces {
+  id Int @id @default(autoincrement())
+  name String
+  slug String @unique
+  createdAt DateTime @default(now())
+  openAiHistory Int @default(20)
+  lastUpdatedAt DateTime @default(now())
+  chatMode String? @default("chat")
+  documents workspace_documents[]
+}
+
+model workspace_documents {
+  id Int @id @default(autoincrement())
+  docId String @unique
+  filename String
+  docpath String
+  metadata String?
+  pinned Boolean? @default(false)
+  watched Boolean? @default(false)
+  workspaceId Int
+  workspace workspaces @relation(fields: [workspaceId], references: [id])
+  createdAt DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
 }

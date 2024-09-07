@@ -3,6 +3,7 @@ import OpenAI from 'openai'
 
 import { publicProcedure } from '../../trpc'
 // import { PrismaClient } from '@prisma/client'
+import { workspaceRouter } from './workspace'
 
 const client = new OpenAI({
     baseURL: 'http://localhost:11434/v1',
@@ -31,5 +32,7 @@ export const llmRouter = {
                 model: 'nomic-embed-text'
             })
             return chatCompletion.choices?.[0]?.message
-        })
+        }),
+
+    ...workspaceRouter
 }

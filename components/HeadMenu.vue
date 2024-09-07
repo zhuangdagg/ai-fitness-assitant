@@ -10,6 +10,10 @@
 
 const menus = ref([
     {
+        to: '/workspace',
+        name: '工作区'
+    },
+    {
         to: '/knowledge',
         name: '知识库'
     }, {
