@@ -1,16 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [['@nuxtjs/apollo', {
-    clients: {
-      default: {
-        httpEndpoint: 'http://localhost:3000/graphql',
-        httpLinkOptions: {
+      clients: {
+        default: {
+          httpEndpoint: 'http://localhost:3000/graphql',
+          httpLinkOptions: {
+          }
         }
       }
-    }
-  }], 
-  '@nuxt/ui'
-],
+    }], 
+    ['@nuxt/ui', { notifications: { position: 'top-0 right-0'}}]
+  ],
   build: {
     transpile: ['trpc-nuxt'],
   },
@@ -23,6 +23,13 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
+  },
+  vite: {
+    server: {
+      hmr: {
+        overlay: false
+      }
+    }
   }
 
   // module config

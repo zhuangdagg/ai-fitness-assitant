@@ -20,6 +20,7 @@
     "chromadb": "^1.8.1",
     "chromadb-default-embed": "^2.13.2",
     "graphql": "^16.9.0",
+    "h3-proxy": "^1.13.0",
     "nuxt": "^3.13.0",
     "openai": "^4.56.0",
     "trpc-nuxt": "^0.10.22",

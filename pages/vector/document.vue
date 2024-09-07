@@ -1,5 +1,7 @@
 <template>
-    <div>config</div>
+    <div>
+        document
+    </div>
 </template>
 
 <script setup lang="ts">
