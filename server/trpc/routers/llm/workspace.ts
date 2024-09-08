@@ -12,7 +12,23 @@ export const workspaceRouter = {
                 data: input
             })
         }),
-    // editWorkspace: publicProcedure.input().mutation()
+    editWorkspace: publicProcedure.input(z.object({
+        id: z.number(),
+        name: z.string(),
+        chatMode: z.string(),
+        openAiHistory: z.number()
+    })).mutation(({ input }) => {
+        console.log(input, '--e')
+        return prisma.workspaces.update({
+            where: {
+                id: input.id
+            },
+            data: {
+                ...input,
+                lastUpdatedAt: new Date()
+            }
+        })
+    }),
     deleteWorkspace: publicProcedure.input(z.object({
         ids: z.array(z.number())
     })).mutation(async({ input }) => {
@@ -27,7 +43,9 @@ export const workspaceRouter = {
     listWorkspace: publicProcedure.input(z.object({
         id: z.unknown(),
         name: z.string(),
-        slug: z.string()
+        slug: z.string(),
+        pageIndex: z.number().default(1),
+        pageSize: z.number().default(10),
     })).query(async({ input }) => {
         console.log(input, '--input')
         const where: any = {
@@ -41,10 +59,16 @@ export const workspaceRouter = {
         if(input.id) {
             where['id'] = input.id
         }
-        const data = await prisma.workspaces.findMany({
-            where
-        })
-        return data 
+        const filter = {
+            where,
+            skip: (input.pageIndex - 1) * input.pageSize,
+            take: input.pageSize,
+        }
+        const [data, total] = await prisma.$transaction([
+            prisma.workspaces.findMany(filter),
+            prisma.workspaces.count(filter)
+        ])
+        return {data, total} 
         
     })
 }
