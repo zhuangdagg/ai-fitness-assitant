@@ -5,6 +5,8 @@ import { publicProcedure } from '../../trpc'
 // import { PrismaClient } from '@prisma/client'
 import { workspaceRouter } from './workspace'
 import { documentRouter } from './document'
+import { sseEvent } from '~/server/utils/helper'
+import { createReadable } from '~/server/utils/helper'
 
 const client = new OpenAI({
     baseURL: 'http://localhost:11434/v1',
@@ -25,16 +27,14 @@ export const llmRouter = {
                 messages: [
                     input
                 ],
+                stream: true
                 // function_call: []
             })
-
-            const a = await client.embeddings.create({
-                input: ['heibao'],
-                model: 'nomic-embed-text'
-            })
-            return chatCompletion.choices?.[0]?.message
+            sseEvent.emit(`chat123`, createReadable(chatCompletion))
+            return 'success'
         }),
 
     ...workspaceRouter,
     ...documentRouter,
 }
+

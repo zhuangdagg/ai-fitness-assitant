@@ -3,7 +3,7 @@
         :ui="{ item: { disabled: 'cursor-text select-text'}}"
         :popper="{ placement: 'bottom-start'}"
     >
-        <UAvatar src="/akjs.png" /> 
+        <UAvatar src="/user.jpeg" /> 
         <template #account="{ item }">
             <div class="text-left">
                 <p>

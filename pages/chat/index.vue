@@ -12,6 +12,9 @@
 
 const question = ref<string>('')
 const modelVisible = ref<boolean>(false)
+const flag = reactive({
+    isNewAnswer: false
+})
 
 const history = ref<any[]>([
     { role: 'sys', content: '我是Qwen2，请向我提问吧！'},
@@ -31,13 +34,41 @@ const submitHandler = async (question: string) => {
         role: 'user',
         content: unref(question)
     }
-    history.value.push(userQuestion)
-    const { data } = await useLLMChat(userQuestion as any)
 
-    console.log({ data })
-    history.value.push(unref(data))
+    const answer = {
+        role: 'assistant',
+        content: '',
+        loading: true
+    }
+    history.value.push(userQuestion, answer)
+    await createEventSource()
+    await useLLMChat(userQuestion as any)
     return true
 }
+
+const createEventSource = () => {
+    return new Promise<EventSource>((resolve, reject) => {
+        const source = new EventSource('/api/sse/123', { withCredentials: false })
+
+        source.onmessage = (evt) => {
+            const answer = history.value[history.value.length - 1]
+            if(answer.loading) {
+                answer.loading = false
+            }
+            answer.content += evt.data
+        }
+        source.onerror = (evt) => {
+            source.close()
+            reject(source)
+        }
+        resolve(source)
+    })
+    
+}
+
+onMounted(() => {
+    // acceptAnswer()
+})
 
 
 </script>
