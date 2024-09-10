@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { publicProcedure } from '../../trpc'
-import { workspaceValidate } from '~/common/validate/llm'
+import { workspaceValidate, ids, createListQueryValidator } from '~/common/validate'
 import prisma from '~/lib/prisma'
 
 export const workspaceRouter = {
@@ -29,9 +29,7 @@ export const workspaceRouter = {
             }
         })
     }),
-    deleteWorkspace: publicProcedure.input(z.object({
-        ids: z.array(z.number())
-    })).mutation(async({ input }) => {
+    deleteWorkspace: publicProcedure.input(ids).mutation(async({ input }) => {
         return prisma.workspaces.deleteMany({
             where: {
                 id: {
@@ -40,14 +38,13 @@ export const workspaceRouter = {
             }
         })
     }),
-    listWorkspace: publicProcedure.input(z.object({
-        id: z.unknown(),
-        name: z.string(),
-        slug: z.string(),
-        pageIndex: z.number().default(1),
-        pageSize: z.number().default(10),
-    })).query(async({ input }) => {
-        console.log(input, '--input')
+    listWorkspace: publicProcedure.input(
+        createListQueryValidator(z.object({
+            id: z.unknown().default(''),
+            name: z.string().default(''),
+            slug: z.string().default(''),
+        }))
+    ).query(async({ input }) => {
         const where: any = {
             name: {
                 contains: input.name

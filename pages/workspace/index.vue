@@ -1,6 +1,6 @@
 <template>
-    <main class="p-2 space-y-6 divide-y-2">
-        <UForm :state="filterForm" class="flex space-x-4" @submit="listWorkspace">
+    <main class="p-2 divide-y-2">
+        <UForm :state="filterForm" class="flex pb-2 space-x-4" @submit="listWorkspace">
             <UFormGroup class="flex items-center" label="工作区ID：">
                 <UInput type="number" v-model="filterForm.id" />
             </UFormGroup>
@@ -120,10 +120,6 @@ const handleDelete = (row?: any) => {
         useToast().add({ title: `${rows.map(r => r.name).join(',')}已删除`})
         listWorkspace()
     })
-}
-
-const onSuccess = () => {
-    listWorkspace()
 }
 
 onMounted(() => {

@@ -1,27 +1,20 @@
 <template>
-    <div>
-        <UInput type="text" v-model="question" />
-        <UButton @click="handleQuestion">提交</UButton>
-        <UButton @click="handlePrisma">test prisma</UButton>
+    <div class="custom flex flex-col p-4 rounded-xl max-h-full h-full space-y-2">
+        <ul class="flex-1 rounded-xl overflow-y-auto">
+            <ChatCommonItem v-for="(item, index) in history" :key="index" :value="item" />
+        </ul>
+        <ChatInput :submitHandler="submitHandler" />
     </div>
-    <ul class="text-current">
-        <li v-for="item in history">
-            {{ `${item.role}: ${item.content}` }}
-        </li>
-    </ul>
-    <UModal v-model="modelVisible">
-        <div class="h-52 flex justify-center align-middle" />
-    </UModal>
 </template>
 
 <script setup lang="ts">
 
 
 const question = ref<string>('')
-const modelVisible = ref<boolean>(true)
+const modelVisible = ref<boolean>(false)
 
 const history = ref<any[]>([
-    { role: 'sys', content: '我是Qwen2，请向我提问吧！'}
+    { role: 'sys', content: '我是Qwen2，请向我提问吧！'},
 ])
 
 defineShortcuts({
@@ -33,7 +26,7 @@ defineShortcuts({
     }
 })
 
-const handleQuestion = async () => {
+const submitHandler = async (question: string) => {
     const userQuestion = {
         role: 'user',
         content: unref(question)
@@ -43,8 +36,14 @@ const handleQuestion = async () => {
 
     console.log({ data })
     history.value.push(unref(data))
+    return true
 }
 
-const handlePrisma = () => {}
 
 </script>
+
+<style>
+.custom {
+    height: calc(100vh - 58px);
+}
+</style>

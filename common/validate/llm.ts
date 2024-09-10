@@ -5,6 +5,15 @@ const workspaceValidate = z.object({
     slug: z.string().min(6, '至少6个字符').describe('标识符')
 })
 
+const documentValidate = z.object({
+    docId: z.string().describe('文本ID'),
+    filename: z.string(),
+    docpath: z.string(),
+    metadata: z.string().default(''),
+    workspaceId: z.number()
+})
+
 export {
-    workspaceValidate
+    workspaceValidate,
+    documentValidate
 }

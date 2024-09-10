@@ -1,4 +1,4 @@
-import { ChromaClient } from "chromadb";
+import { ChromaClient, IEmbeddingFunction } from "chromadb";
 import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import { TextSplitter } from "../../TextSplitter";
@@ -67,6 +67,7 @@ export const Chroma = {
       if (data && data.length) {
         return data.map((item) => item.embedding);
       }
+      return [[]]
     },
   },
 
@@ -90,14 +91,29 @@ export const Chroma = {
     const { client } = await this.connect();
     const collections = await client.listCollections();
     let totalVectors = 0;
+    let data = []
     for (const collectionObj of collections) {
       const collection = await client
         .getCollection({ name: collectionObj.name })
         .catch(() => null);
       if (!collection) continue;
       totalVectors += await collection.count();
+      data.push(await collection.get())
     }
-    return totalVectors;
+    return [totalVectors, data];
+  },
+  listVectors: async function ({
+    namespace,
+
+  }: {
+    namespace: string,
+
+  }) {
+    const { client } = await this.connect();
+    const collection = await client.getCollection({
+      name: this.normalize(namespace),
+    });
+    return await collection.get()
   },
   distanceToSimilarity: function (distance: any) {
     if (distance === null || typeof distance !== "number") return 0.0;
@@ -139,6 +155,17 @@ export const Chroma = {
         return null;
       });
     return !!collection;
+  },
+  deleteVectorsByIds: async function({
+    namespace, ids = []
+  }: {
+    namespace: string, ids: string[]
+  }) {
+    const { client } = await this.connect();
+    const collection = await client.getCollection({
+      name: this.normalize(namespace),
+    });
+    return await collection.delete({ ids })
   },
   deleteVectorsInNamespace: async function (
     client: ChromaClient,
@@ -303,6 +330,7 @@ export const Chroma = {
       });
 
       const textChunks = await textSplitter.splitText(pageContent);
+
       const submission: any = {
         ids: [],
         metadatas: [],
@@ -329,12 +357,14 @@ export const Chroma = {
           "Could not embed document chunks! This document will not be recorded."
         );
       }
-
+      
       const { client } = await this.connect();
       const collection = await client.getOrCreateCollection({
         name: this.normalize(namespace),
         metadata: { "hnsw:space": "cosine" },
+        embeddingFunction: this.ollamaEmbeddingFunction
       });
+
       const additionResult = await collection.add(submission);
       if (!additionResult)
         throw new Error("Error embedding into ChromaDB", additionResult);
