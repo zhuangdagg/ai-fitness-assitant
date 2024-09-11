@@ -3,8 +3,9 @@
         <div>
             <UAvatar :src="isUser ? '/user.jpeg' : '/akjs.png'" />
         </div>
-        <div class="mx-2 bg-slate-300 dark:bg-slate-600 p-2 rounded-md" :class="userClass">
-            <span v-if="!value.loading">{{ `${value.content}` }}</span>
+        <div class="mx-2 p-2 rounded-md" :class="userClass">
+            <ChatMarkdownIt v-if="!value.loading" :content="value.content" />
+            <!-- <span v-if="!value.loading">{{ `${value.content}` }}</span> -->
             <div v-else class="w-40">{{ '思考中' + waitTip.dot }}</div>
         </div>
         <div class="invisible">
@@ -57,10 +58,12 @@ const userLiClass = computed(() => {
 })
 
 const userClass = computed(() => {
-    if(isUser.value) {
+    if(props.value.role === 'user') {
         return ['bg-green-300',
             'dark:bg-green-600']
     }
-    return ''
+    return [
+    'bg-slate-300', 'dark:bg-slate-600'
+    ]
 })
 </script>

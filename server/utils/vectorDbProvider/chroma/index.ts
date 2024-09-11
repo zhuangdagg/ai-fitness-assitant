@@ -248,9 +248,9 @@ export const Chroma = {
   }: {
     namespace: string;
     input: string;
-    similarityThreshold: number;
-    topN: number;
-    filterIdentifiers: any[];
+    similarityThreshold?: number;
+    topN?: number;
+    filterIdentifiers?: any[];
   }) {
     if (!namespace || !input)
       throw new Error("Invalid request to performSimilaritySearch.");
@@ -265,6 +265,7 @@ export const Chroma = {
     }
     const collection = await client.getCollection({
       name: this.normalize(namespace),
+      embeddingFunction: this.ollamaEmbeddingFunction
     });
 
     const result: {

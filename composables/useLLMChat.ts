@@ -8,8 +8,8 @@ type RouterOutput = inferRouterOutputs<AppRouter>
 type GetData = RouterOutput['chat']
 type ErrorOutput = TRPCClientError<AppRouter>
 
-export default async function useLLMChat(question: { role: 'user', content: string }) {
+export default async function useLLMChat(question: any[]) {
     const { $trpc } = useNuxtApp()
 
-    await $trpc.chat.query(question)
+    await $trpc.chat.query({ messages: question.slice(0, -1)})
 }

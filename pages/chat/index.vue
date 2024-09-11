@@ -8,6 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import { StorageKey } from '~/composables/useStorage';
+
 
 
 const question = ref<string>('')
@@ -17,7 +19,7 @@ const flag = reactive({
 })
 
 const history = ref<any[]>([
-    { role: 'sys', content: '我是Qwen2，请向我提问吧！'},
+    { role: 'system', content: '我是健身教练AK，请向我提问吧！'},
 ])
 
 defineShortcuts({
@@ -42,7 +44,7 @@ const submitHandler = async (question: string) => {
     }
     history.value.push(userQuestion, answer)
     await createEventSource()
-    await useLLMChat(userQuestion as any)
+    await useLLMChat(history.value as any)
     return true
 }
 
@@ -59,6 +61,7 @@ const createEventSource = () => {
         }
         source.onerror = (evt) => {
             source.close()
+            useStorage(StorageKey.chat_history).save(history.value)
             reject(source)
         }
         resolve(source)
@@ -66,8 +69,16 @@ const createEventSource = () => {
     
 }
 
+const getHistory = () => {
+    const val = useStorage(StorageKey.chat_history).get()
+    if(val) {
+        history.value = val
+    }
+}
+
 onMounted(() => {
     // acceptAnswer()
+    getHistory()
 })
 
 
