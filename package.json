@@ -1,5 +1,6 @@
 {
-  "name": "akjs",
+  "name": "@akjs/ai-assistance-app",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
