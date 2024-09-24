@@ -2,6 +2,6 @@
 
 ## 带知识库的Qwen2模型demo
 
-![截图](./public/capture.png)
+![截图](https://github.com/zhuangdagg/ai-fitness-assitant/tree/main/public/capture.png)
 
 
